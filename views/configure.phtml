@@ -1,0 +1,52 @@
+<?php
+?>
+
+<div class="wrap">
+    <h1>Configure Icecat Live integration</h1>
+    <?php if( !empty($view_vars['errors']) ){ ?>
+    <div id="message" class="error inline"><p><strong><?php echo implode('<br>', $view_vars['errors'])?></strong></p></div>
+    <?php } elseif( isset($view_vars['success']) && $view_vars['success'] ) { ?>
+    <div id="message" class="updated inline"><p><strong><?php echo __('Success!', 'integration-of-icecat-live')?></strong></p></div>
+    <?php } ?>
+    <form action="" method="post">
+        <?php wp_nonce_field( -1, NSWICLV_SHORTNAME .'_wpnonce' ); ?>
+        <table class="form-table">
+            <tbody>
+                
+                <?php foreach( $view_vars['options'] as $optionCnf ){ ?>
+                <tr>
+                    <th scope="row"><?php echo esc_html_e( $optionCnf['label'] )?></th>
+                    <td>
+                    <?php if( $optionCnf['input_type'] == 'text' ){ ?>
+                        <input type="text" name="<?php echo esc_attr($optionCnf['name'])?>" id="<?php echo isset($optionCnf['id']) ? esc_attr($optionCnf['id']) : esc_attr($optionCnf['name'])?>" value="<?php echo $optionCnf['value']?>">
+                    <?php } elseif( $optionCnf['input_type'] == 'select' ){ ?>
+                    <select name="<?php echo esc_attr($optionCnf['name'])?>" id="<?php echo isset($optionCnf['id']) ? esc_attr($optionCnf['id']) : esc_attr($optionCnf['name'])?>">
+                        <?php foreach( $optionCnf['input_options'] as $selectOption ){ ?>
+                        <option value="<?php echo esc_attr($selectOption['value'])?>" <?php echo ( $selectOption['value'] == $optionCnf['value'] ? 'selected' : '' )?>
+                            ><?php echo esc_html($selectOption['label']); ?></option>
+                        <?php } ?>
+                    </select>
+
+                    <?php } ?>
+                    
+                    <?php if( !empty($optionCnf['description']) ){ ?>
+                    <p class="description"><?php echo esc_html($optionCnf['description']) ?></p>
+                    <?php } ?>
+                    </td>
+                </tr>
+                <?php } ?>
+                <tr>
+                	 <th scope="row"><?php echo __('Pattern of shortcode to add a product from the Icecat catalog to the page.', 'integration-of-icecat-live')?></th>
+                	<td>
+                		<textarea cols='40' rows='5' name='<?php echo NSWICLV_SHORTNAME . '_pattern_shortcode' ?>' readonly><?php echo esc_attr($view_vars['pattern_shortcode_value']) ?></textarea>
+                		<p class="description"><?php echo __('You can use this template to embed the product datasheet into your content from the Icecat Live.', 'integration-of-icecat-live')?></p>
+                	</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <p class="submit">
+            <button type="submit" class="button button-primary"><?php echo esc_html_e('Save changes')?></button>
+        </p>
+    </form>
+</div>
